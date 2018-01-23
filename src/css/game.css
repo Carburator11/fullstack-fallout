@@ -1,0 +1,126 @@
+.play{
+    color: white;
+    text-align: center;    
+}
+
+.playground{
+    width: 800px;
+    height : 600px;
+    border: 1px solid purple;
+    background: rgb(56, 47, 47);
+}
+
+.path {
+    width: 10px;
+    height : 10px;
+    background: rgb(172, 22, 22);
+    position: absolute;
+}
+
+.playerPos{
+    width: 10px;
+    height : 10px;
+    background: rgb(81, 190, 7);
+    position: absolute;
+}
+
+.block{
+    border: 1px solid yellow;
+    position: absolute;
+}
+
+.shot{
+    background: rgb(241, 166, 5);
+    position: absolute;
+}
+
+.nuke{
+    position: absolute;
+    left: 200px;
+}
+
+.playerFrame{
+    width: 60px;
+    height: 70px;
+    overflow: hidden;
+    position: absolute;
+    top: -60px;
+    left: -30px;
+}
+
+#imgSprite{
+    position: relative;
+}
+
+.npc{
+    width: 10px;
+    height : 10px;
+    position: absolute;
+    background: yellow;   
+}
+
+.cowDiv{
+    width: 150px;
+    height: 100px;
+    overflow: hidden;
+    position: absolute;
+    border: 1px solid purple;
+    margin-top:  -30px;
+    margin-left: -50px;
+    text-align: left;
+}
+
+#cowSprite{
+    position: absolute;
+}
+
+#timer{
+    position: absolute;
+    top: 60px;
+    left: 20px;
+}
+
+#gameOver{
+    width: 600px;
+    height: 375px;
+    position: absolute;
+    left: 100px;
+    top: 60px;
+    text-align: center;
+    background: url("../pic/score.png");
+    background-repeat: repeat;
+    background-size: contain;
+    background-position-x: left;
+    background-position-y: top;
+    z-index: 99;
+    border-radius: 25px;
+    
+    color: #00ad00;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius : 5px;
+ 
+}
+
+.scores{
+    padding-top: 170px;
+    width: 90%;
+    display: inline-block;}
+
+.gameOverBtn{
+    width: 90%;
+    text-align: center;  
+    display: inline-block;
+}
+
+.gameOverBtn form{
+    margin: 5px;
+    display: inline-block;
+
+    }
+
+.gameOverBtn input{
+    border: 2px solid #00ad00; 
+    display: inline-block;
+    border-radius : 5px;
+}
