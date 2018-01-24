@@ -1,4 +1,5 @@
 import { togglePause, bonusEvent } from './gameCycle.js';
+import { shoot }  from '../function/gameAnim.js';
 
 
  const keyboardEvents = (that) => {
@@ -19,7 +20,7 @@ window.addEventListener("keydown",
             }
 
         if( (e.key === " ") || (e.key === "Enter") ){          
-            that.shoot();
+            shoot(that);
           }
       
         if( e.key === "e" ){

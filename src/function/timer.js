@@ -1,8 +1,6 @@
-import { gameOver } from './gameCycle.js';
+import { gameOver } from './gameCycle';
 
-
-
-// Timer till the "Game over"
+// Timer till the Game is "over"
 const decrTimeLeft = (that) => {
     //console.log('timer');
     if(!that.state.pause){ 
