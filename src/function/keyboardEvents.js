@@ -1,8 +1,9 @@
 import { togglePause, bonusEvent } from './gameCycle.js';
-import { shoot }  from '../function/gameAnim.js';
+import { shoot } from '../function/gameAnim.js';
+import { enemyDie } from './enemyAnim';
 
 
- const keyboardEvents = (that) => {
+const keyboardEvents = (that) => {
   // Easter Egg !!^^ 
 
 var count = 0;
@@ -42,7 +43,7 @@ window.addEventListener("keydown",
                 
                 that.setState({cheatMode: true});
                 that.state.enemies.forEach((el)=>{
-                    that.enemyDie(that.state.enemies.indexOf(el), 0)
+                    enemyDie(that.state.enemies.indexOf(el), 0, that)
                 });               
                 setTimeout(
                     ()=> {
