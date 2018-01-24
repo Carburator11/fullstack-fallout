@@ -4,7 +4,7 @@
 
 **Déployé sur :** [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/)
 
-Technos :
+
 * **Front-end :**  React, React-Router (sur base de [Create React App](https://github.com/facebookincubator/create-react-app))
 * **Back-end :**  Node.js ([React simple boilerplate](https://github.com/andela-kadeniyi/react-simple-boilerplate/))
 

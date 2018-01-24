@@ -7,8 +7,11 @@ import Shot  from './game/Shot.js';
 import Nuke  from './game/Nuke.js';
 import Timer from './game/Timer.js';
 import GameOver from './game/GameOver.js';
+import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
-
+import { bonusClose } from '../function/gameCycle.js';
+import { keyboardEvents } from '../function/keyboardEvents.js';
+import { decrTimeLeft } from '../function/timer.js';
 
 class Playground extends React.Component {
     constructor(props) {
@@ -16,6 +19,8 @@ class Playground extends React.Component {
         this.state = { 
                        pause:    false,
                        gameOver: false,
+                       bonusEvent: false,
+                       bonusNum: 0,
                        pathX:    60 ,
                        pathY:   -50 ,
                        playerX:  60,
@@ -36,6 +41,7 @@ class Playground extends React.Component {
                          [400, 400, 50, 50, "cow3", "alive", 0, 0]]
                      };
         this.handleClick = this.handleClick.bind(this);
+        this.decrTimeLeft = this.decrTimeLeft.bind(this);
 
         // Not used in the final version
         this.blocks = [
@@ -67,33 +73,6 @@ handleClick(e){
 }
 
 
-
-startAnimation(callback) {
-  
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      callback();
-    });
-  });
-}
-
-pause(){
-    console.log('PAUSE');
-    this.setState({
-      pause: true,
-      isIdle: true
-    });
-}
-
-gameOver(){
-  console.log('GAME OVER');
-  this.setState({
-    pause: true,
-    isIdle: true,
-    gameOver: true
-  });  
-
-}
 
 checkPos(){
     if(!this.state.pause){  
@@ -265,102 +244,16 @@ spawnEnemy(){
   this.setState({ enemies: newEnemyArray  });
 }
 
-// Timer till the "Game over"
-decrTimeLeft(){
-  if(!this.state.pause){
-      if(this.state.timeLeft > 0){
-        setTimeout(
-            ()=>{ 
-              this.setState( 
-                  prevState => ({
-                    timeLeft: (prevState.timeLeft - 1)
-                  }),
-                    ()=>{
-                        this.decrTimeLeft()
-                        })
-        } , 1000 )
-      } 
-
-      else{
-          // Game over !
-          this.gameOver();
-
-
-      }
-  } else {
-    setTimeout(  ()=> {this.decrTimeLeft() }, 1000);
-  }
-}
-
-bonusTime(){
-  if(this.statekillCount > 0){
-
-      if(this.statekillCount % 5 ){
-        console.log("Bonus time + 5s");
-        this.setState( (prevState)=> ({ timeLeft: prevState.timeLeft + 3 }))
-      }
 
 
 
-    }
-}
 
 
 
 componentDidMount() {
-  
-  this.decrTimeLeft()
-
-  // Easter Egg !!^^ 
-  var count = 0
-  var konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a" ];
-
-  window.addEventListener("keydown", 
-    (e)=> {
-      // Display or Hide level blocks
-      // Note : I was too lazy to implement a proper pathfinding in this project, so blocks are hidden by default
-      // Pretty sure it wasn't worth it
-      if(e.key === "o"){
-      (this.state.showBlocks)?
-            this.setState({showBlocks: false})
-            :
-            this.setState({showBlocks: true})
-          }
-
-      if( (e.key === " ") || (e.key === "Enter") ){          
-            this.shoot();
-          }
-      
-      if( e.key === "p" ){
-          if(this.state.pause){
-              this.setState( { pause: false });
-          }
-          else{
-              if(!this.state.gameOver){
-                this.pause();
-              }
-          }        
-      }
-      
-      if(e.key === konami[count]){
-              console.log("cheatSequence:  " + count + " " + e.key);
-              if(e.key === konami[konami.length - 1]){
-                this.setState({cheatMode: true})
-                this.state.enemies.forEach((el)=>{
-                  this.enemyDie(this.state.enemies.indexOf(el), 0)
-                  } 
-                )               
-
-                setTimeout(
-                  ()=> { this.setState({cheatMode: false, enemies: []}); }
-                , 1800)  
-              }
-              count++;
-          }
-      else{ count = 0}
-      });
-    }
-
+    decrTimeLeft();
+    keyboardEvents(this);
+}
 
 
     render() {
@@ -371,11 +264,20 @@ componentDidMount() {
           Click to move, 'Space' to shoot  {this.props.session}
           
           <Timer time= {this.state.timeLeft} />
+
+          {this.state.bonusEvent? <Bonus
+            num = {this.state.bonusNum}
+            close = { () => { bonusClose(this) } }
+          />:""}  
+
           {this.state.gameOver? <GameOver
               playerScore = {this.playerScore}
               killCount   = {this.killCount}
               shotCount   = {this.shotCount}
-          />:""}  
+          />:""}
+
+
+
           <Path 
                 pathX = {this.state.pathX} 
                 pathY = {this.state.pathY}
