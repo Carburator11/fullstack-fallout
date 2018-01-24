@@ -9,7 +9,7 @@
 * **Back-end :**  Node.js ([React simple boilerplate](https://github.com/andela-kadeniyi/react-simple-boilerplate/))
 
 24/01/2018 :  trop de this = that dans les fonctions de la logique du jeu './src/function'....
-Si quelqu'un a une milleure une solution
+Si quelqu'un a meilleure solution ?
 
 La version JS vanilla de ce projet est consultable sur : [carb11.eu](http://carb11.eu/fallout/).
 
