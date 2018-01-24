@@ -2,11 +2,11 @@
 
 
 
-[https://fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/)
+**Déployé sur :** [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/)
 
 Technos :
-* **Front :**  React, React-Router (sur base de [Create React App](https://github.com/facebookincubator/create-react-app))
-* **Back :**  Node.js ([React simple boilerplate](https://github.com/andela-kadeniyi/react-simple-boilerplate/))
+* **Front-end :**  React, React-Router (sur base de [Create React App](https://github.com/facebookincubator/create-react-app))
+* **Back-end :**  Node.js ([React simple boilerplate](https://github.com/andela-kadeniyi/react-simple-boilerplate/))
 
 La version JS vanilla de ce projet est consultable sur : [carb11.eu](http://carb11.eu/fallout/).
 
