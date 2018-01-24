@@ -11,7 +11,7 @@
     else{
         console.log('un-PAUSE');
         that.setState({
-            pause: false, isIdle: false
+            pause: false, isIdle: true
         });
     }
 }

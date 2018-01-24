@@ -3,31 +3,34 @@ import { gameOver } from './gameCycle.js';
 
 
 // Timer till the "Game over"
-export const decrTimeLeft = () => {
-        console.log('timer');
-        if(!this.state.pause){
-            
-            if(this.state.timeLeft > 0){
-            setTimeout(
-                ()=>{ 
-                    this.setState( 
-                        prevState => ({
-                        timeLeft: (prevState.timeLeft - 1)
-                        }),
-                        ()=>{
-                            decrTimeLeft()
-                            })
-            } , 1000 )
-            } 
-    
-            else{
-                // Game over !
-                gameOver(this);
-    
-    
-            }
-        } else {
-        setTimeout(  ()=> {decrTimeLeft() }, 1000);
+const decrTimeLeft = (that) => {
+    //console.log('timer');
+    if(!that.state.pause){ 
+        if(that.state.timeLeft > 0){
+        setTimeout(
+            ()=>{ 
+                that.setState( 
+                    prevState => ({
+                    timeLeft: (prevState.timeLeft - 1)
+                    }),
+                    ()=>{
+                        
+                        decrTimeLeft(that)
+                        })
+        } , 1000 )
+        } 
+
+        else{
+            // Game over !
+            gameOver(that);
+
+
         }
+    } else {
+    
+    setTimeout(  ()=> {decrTimeLeft(that) }, 1000);
+    }
     
 }
+
+export {decrTimeLeft};

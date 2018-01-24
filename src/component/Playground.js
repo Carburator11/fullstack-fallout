@@ -30,7 +30,7 @@ class Playground extends React.Component {
                        showBlocks: false,
                        cheatMode:  false,
                        shot: [],
-                       timeLeft:  10,
+                       timeLeft:  30,
 
                        enemies: [
                          // X position (css left), Y position (css top), Width, Heigth, id/key, status, spriteX, spriteY
@@ -40,8 +40,9 @@ class Playground extends React.Component {
                          [500, 350, 50, 50, "cow2", "alive", 0, 0],
                          [400, 400, 50, 50, "cow3", "alive", 0, 0]]
                      };
-        this.handleClick = this.handleClick.bind(this);
-        this.decrTimeLeft = this.decrTimeLeft.bind(this);
+        
+        // Auto-bound with arrow function            
+        //this.handleClick = this.handleClick.bind(this);
 
         // Not used in the final version
         this.blocks = [
@@ -251,7 +252,7 @@ spawnEnemy(){
 
 
 componentDidMount() {
-    decrTimeLeft();
+    decrTimeLeft(this);
     keyboardEvents(this);
 }
 
@@ -259,7 +260,7 @@ componentDidMount() {
     render() {
 
       return (
-        <div className = "playground" onClick = {this.handleClick} style={{ backgroundImage: "url(" + bg + ")" }}>
+        <div className = "playground" onClick = { (e) => this.handleClick(e) } style={{ backgroundImage: "url(" + bg + ")" }}>
            
           Click to move, 'Space' to shoot  {this.props.session}
           
