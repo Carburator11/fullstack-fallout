@@ -12,7 +12,7 @@ import bg    from '../pic/game/bg1.jpg';
 import { bonusClose } from '../function/gameCycle.js';
 import { keyboardEvents } from '../function/keyboardEvents.js';
 import { decrTimeLeft } from '../function/timer.js';
-import { checkPos, move, shoot }  from '../function/gameAnim.js';
+import { checkPos }  from '../function/gameAnim.js';
 
 class Playground extends Component {
     constructor(props) {
@@ -93,8 +93,8 @@ render() {
           <Path 
                 pathX = {this.state.pathX} 
                 pathY = {this.state.pathY}
-
            />
+
           <PlayerPos
                 playerX  = { this.state.playerX }
                 playerY  = { this.state.playerY }

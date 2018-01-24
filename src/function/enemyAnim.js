@@ -38,7 +38,7 @@ const enemyShot = (e, that) => {
 const enemyDie = (e, count, that)=> {
     if(count<10){
         count++;
-        var newEnemies = that.state.enemies ;
+        let newEnemies = that.state.enemies ;
         // Updating sprite left position on each loop
         newEnemies[e][6] =  newEnemies[e][6] - 150 ;
 
