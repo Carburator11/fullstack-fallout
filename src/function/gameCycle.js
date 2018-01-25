@@ -1,3 +1,7 @@
+import { checkPos }  from './gameAnim.js';
+ 
+ 
+ 
  const togglePause = (that)=>{
     console.log('togglePause')
     if(!that.state.pause){
@@ -11,8 +15,8 @@
     else{
         console.log('un-PAUSE');
         that.setState({
-            pause: false, isIdle: true
-        });
+            pause: false, isIdle: false
+        }, ()=> checkPos(that) );
     }
 }
 

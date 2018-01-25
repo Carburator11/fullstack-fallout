@@ -146,3 +146,24 @@
     display: inline-block;
     border-radius : 5px;
 }
+
+.about{
+
+    color: #00ad00;
+    text-align: center;
+    margin: 40px;
+}
+
+.about img{margin: 20px;}
+.download a, a:visited {
+    text-decoration: none;
+    color: darkGreen; 
+}
+
+.download a:hover{
+    color: #00ad00; 
+}
+
+#disclaimer{
+    margin: 30px;
+    color: darkGreen}

@@ -11,7 +11,7 @@ import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
 import { bonusClose } from '../function/gameCycle.js';
 import { keyboardEvents } from '../function/keyboardEvents.js';
-import { decrTimeLeft } from '../function/timer.js';
+import { decrTimeLeft }   from '../function/timer.js';
 import { checkPos }  from '../function/gameAnim.js';
 
 class Playground extends Component {
@@ -75,14 +75,19 @@ componentDidMount() {
 
 render() {
       return (
-        <div className = "playground" onClick = { (e) => this.handleClick(e) } style={{ backgroundImage: "url(" + bg + ")" }}>        
+        <div
+            className = "playground" 
+            onClick = { (e) => this.handleClick(e) }
+            style={{ backgroundImage: "url(" + bg + ")" }}>
+
           Click to move, 'Space' to shoot  {this.props.session}       
           <Timer time= {this.state.timeLeft} />
 
-          {this.state.bonusEvent? <Bonus
-            num = {this.state.bonusNum}
-            close = { () => { bonusClose(this) } }
-          />:""}  
+            {this.state.bonusEvent?
+             <Bonus
+                num = {this.state.bonusNum}
+                close = { () => { bonusClose(this) } }
+            />:""}  
 
           {this.state.gameOver? <GameOver
               playerScore = {this.playerScore}
