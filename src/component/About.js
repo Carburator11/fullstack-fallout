@@ -17,7 +17,7 @@ class About extends Component {
           </div>
 
           <div className="download">
-              <a href="https://www.linkedin.com/in/pierrevautherin/" target="_blank"> > Contact me on LinkedIn</a>
+              <a href="https://www.linkedin.com/in/pierrevautherin/" target="_blank" rel="noopener noreferrer" > > Contact me on LinkedIn</a>
           </div>  
 
 
@@ -25,7 +25,7 @@ class About extends Component {
           <p>This project is based on React and React-Router (using CRA)<br/>
           It runs on a Node.js back-end, déployed on Heroku.</p>
           <div className="download">
-              <a href="https://github.com/Carburator11/fullstack-fallout" target="_blank"> > Follow on GitHub</a>
+              <a href="https://github.com/Carburator11/fullstack-fallout" target="_blank" rel="noopener noreferrer"> > Follow on GitHub</a>
           </div> 
           <img src={about} alt ="about me" title ="about me" style = {{width: 350}}/>
 

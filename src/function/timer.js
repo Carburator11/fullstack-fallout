@@ -4,6 +4,10 @@
 import { gameOver } from './gameCycle';
 
 // Timer till the Game is "over"
+
+
+
+
 const decrTimeLeft = (that) => {
     //console.log('timer');
     if(!that.state.pause){ 
@@ -12,10 +16,10 @@ const decrTimeLeft = (that) => {
             ()=>{ 
                 that.setState( 
                     prevState => ({
-                    timeLeft: (prevState.timeLeft - 1)
+                    timeLeft: (prevState.timeLeft - 1 + that.timeBonus)
                     }),
                     ()=>{
-                        
+                        that.timeBonus = 0;
                         decrTimeLeft(that)
                         })
         } , 1000 )

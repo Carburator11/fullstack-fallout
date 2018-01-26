@@ -30,16 +30,39 @@ const gameOver = (that) => {
   
   }
 
+
+// Bonus event shows a "PERK"
+const bonusCheck = (that, count) => {
+    console.log("Bonus count: " + count);
+    if (  (count % 3) === 0){
+        bonusEvent(that);
+    }
+
+    if(count > 21 ){
+        gameOver(that);
+    }
+
+}
+
 const bonusEvent = (that) => {
     console.log("BONUS");
-    togglePause(that);
-    that.setState({bonusEvent: true, bonusNum: 0});
+    that.setState({bonusEvent: true,  pause: true, idIdle: true});
+
   }
   
 const bonusClose = (that) => {
-    that.setState({bonusEvent: false, pause: false});
+    that.timeBonus = 5;
+    let newBonusNum;
+    if(that.state.bonusNum < 3){ 
+        newBonusNum = that.state.bonusNum;
+        newBonusNum++;
+     }
+    else{
+        newBonusNum = 0;
+    }
+    that.setState({bonusEvent: false, bonusNum : newBonusNum, pause: false, isIdle: false}, ()=> checkPos(that) );
 }
   
 
 
-export { togglePause, gameOver, bonusEvent, bonusClose };
+export { togglePause, gameOver, bonusCheck, bonusEvent, bonusClose };

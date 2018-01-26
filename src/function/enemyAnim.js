@@ -1,4 +1,6 @@
 
+import { bonusCheck } from './gameCycle'
+
 
 // Triggers an animation of the enemy at index [e]
 // Animation starts only if the enemy has the status 'alive' 
@@ -16,6 +18,8 @@ const enemyShot = (e, that) => {
             console.log(that.state.enemies[e][4] + ' - ' + that.state.enemies[e][5]);
             that.killCount++;
             that.playerScore += 15;
+            bonusCheck(that, that.killCount);
+          
             console.log(that.props.session + " :" +  that.playerScore + " pts (kills: "  +  that.killCount  + ", shots: " + that.shotCount  +")" );
 
             // Animation 'enemyDie' will loop 10 times starting from 0

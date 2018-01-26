@@ -21,7 +21,7 @@ class Playground extends Component {
             pause:    false,
             gameOver: false,
             bonusEvent: false,
-            bonusNum: 0,
+            bonusNum: 0,  
             pathX:    60,
             pathY:   -50,
             playerX:  60,
@@ -52,7 +52,7 @@ class Playground extends Component {
         this.shotCount   = 0;
         this.killCount   = 0;
         this.playerScore = 0;
-        
+        this.timeBonus   = 0;
         // Used for setting shoot animations
         this.shootStatus = {
             anEnemyHasBeenShot: false,
@@ -83,13 +83,13 @@ render() {
           Click to move, 'Space' to shoot  {this.props.session}       
           <Timer time= {this.state.timeLeft} />
 
-            {this.state.bonusEvent?
+          {(this.state.bonusEvent && !this.state.gameOver ) ?
              <Bonus
                 num = {this.state.bonusNum}
                 close = { () => { bonusClose(this) } }
             />:""}  
 
-          {this.state.gameOver? <GameOver
+          {this.state.gameOver ? <GameOver
               playerScore = {this.playerScore}
               killCount   = {this.killCount}
               shotCount   = {this.shotCount}

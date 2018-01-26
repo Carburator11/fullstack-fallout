@@ -19,7 +19,7 @@ export default class Bonus extends Component{
                 <div id = "bonus">
                     <div className="perk">
                         <img src = { perks[this.props.num] } alt='perks' />
-                        <button onClick ={ this.props.close } ></button>                  
+                        <button onClick ={ this.props.close } >Bonus +5 sec</button>                  
                     </div>
                 </div>
             
