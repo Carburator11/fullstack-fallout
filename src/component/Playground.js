@@ -9,13 +9,11 @@ import Timer from './game/Timer.js';
 import GameOver from './game/GameOver.js';
 import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
-import { animateShoot } from '../function/ballistics';
-import { togglePause, bonusEvent,  bonusClose } from '../function/gameCycle.js';
+import { stepShot } from '../function/ballistics';
+import { togglePause, bonusEvent, bonusClose } from '../function/gameCycle.js';
 import { decrTimeLeft }   from '../function/timer.js';
 import { checkPos, shoot }  from '../function/gameAnim.js';
 import { enemyDie } from '../function/enemyAnim';
-
-
 
 class Playground extends Component {
     constructor(props) {
@@ -34,6 +32,7 @@ class Playground extends Component {
             showBlocks: false,
             cheatMode:  false,
             shot: [],
+            
             timeLeft:  30,
             shotCount:  0,
 
@@ -56,36 +55,46 @@ class Playground extends Component {
         this.killCount   = 0;
         this.playerScore = 0;
         this.timeBonus   = 0;
-        // Used for setting shoot animations
-        this.shootStatus = {
-            anEnemyHasBeenShot: false,
-            indexOfEnemyShot: ''
-        }
+
         // used for Konami code
         this.keyboardCount = 0;
-
+        this.refreshTime = 10 // =50img/sec
         this.intervId;
+        
+        this.readyToShot = true;
+        this.rateOfFire = 200; 
     }
 
 
-handleClick(e){   
-    if( !this.state.pause ){
-        this.setState({pathX: e.clientX, pathY: e.clientY }, () => {
-            this.animate();  
-        })
+handleClick(e){
+    if( !this.state.pause ){      
+        this.setState({pathX: e.clientX, pathY: e.clientY, readyToShot: false }, () => {
+            this.animate();
+        })      
     }   
 }
 
 animate(){
-    const refreshTime = 15 ; // ~24img/sec
-    clearInterval(this.intervId); // reset preivious anims
+    clearInterval(this.intervId); // reset previous anims
     this.intervId = setInterval( ()=>{
-        this.setState( checkPos(this.state), ()=>{
-            if(!this.state.active){
-                clearInterval(this.intervId);
-            }
-        });
-    }, refreshTime);
+        window.requestAnimationFrame(()=>{
+            this.setState( checkPos(this.state), ()=>{
+                if(!this.state.active){
+                    clearInterval(this.intervId);
+                }
+            });
+        })
+    }, this.refreshTime);
+}
+
+animateShot(e){
+    setTimeout( ()=> {
+        window.requestAnimationFrame(()=>{
+            this.setState( stepShot( this.state , this, e ), ()=> { 
+                if(this.state.shot[e].active) { this.animateShot(e) }
+            })
+        })
+    }, 0); // Set to zero (no performance or gameplay issue so far)
 }
 
 
@@ -94,21 +103,35 @@ componentDidMount() {
     this.animate();  // Player will enter in the Playground
     window.addEventListener("keydown", 
         (e)=> {
-            if( (e.key === " ") || (e.key === "Enter") ){          
-                this.setState(shoot(this.state),  ()=>{ animateShoot( this.state , this ) } );
+            /* SHOOT Function */
+            if( (e.key === " ") && this.readyToShot ){
+                this.readyToShot = false;        
+                this.setState(
+                    shoot(this.state),  ()=>{
+                        this.animateShot(this.state.shotCount);
+                        setTimeout(
+                            ()=>{
+                                //console.log("ready to shot!");
+                                this.readyToShot = true;
+                            }, this.rateOfFire
+                        )
+                    }
+                )
             }
             
+            /* BONUS Function (test) */
             if( e.key === "e" ){
-                  bonusEvent(this);
+                bonusEvent(this);
             }
+
+            /* PAUSE Function */
             if( e.key === "p" ){
-                // Cannot un-pause, if the game is over
                 if(!this.state.gameOver){
                     this.setState( togglePause(this.state), ()=>{ if(!this.state.pause){ this.animate();  }  } );
                 }
             }
 
-            // Display or Hide level blocks (not used in final version)
+            // toggle BLOCKS (not used in final version)
             if(e.key === "o"){
                 (this.state.showBlocks)?
                     this.setState({showBlocks: false}):

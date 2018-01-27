@@ -1,65 +1,57 @@
 import { enemyShot } from './enemyAnim';
 
-
-
 // Argument 'e' is defined by 'shotCount', it is the index of the 'shot' in this.state.shot
-const checkImpact = (e, state, that) => {
-    that.state.enemies.forEach((el) =>{
-        var margin = 10;
-        var shotOnX = ( (state.shot[e].x > ( el[0] - margin) ) && ( state.shot[e][0] < ( el[0] + el[2] + margin  ) ) );
-        var shotOnY = ( (state.shot[e].y > ( el[1] - margin) ) && ( state.shot[e][1] < ( el[1] + el[3] + margin  ) ) );
-        if(shotOnX  &&  shotOnY){
-            that.setState({shootStatus : {
-                anEnemyHasBeenShot: true,
-                indexOfEnemyShot: that.state.enemies.indexOf(el)
-                }
-            });
-        }  
-    })
-}
 
-// Argument 'e' is the index of the 'shot' in Array this.state.shot
-// Each element of this.state.shot is an array containing the position of each 'shot'
-// Each element of this.state.enemies is an array containing the position of each 'enemy'
-// Deleting a 'shot'/'enemy' from its Array deletes the 'enemy' from the DOM
-const animateShoot = (state, that) => {
-    console.log(state.shotCount);
-    var intervID = setInterval(
-        ()=>{
-            checkImpact(state.shotCount, that);
+const stepShot = (state, that, e) => { 
+
+    const impactCheck = () => {
+        let resultObj={};    
+
+        state.enemies.forEach((el) =>{
+            var margin = 10;
+            var shotOnX = ( (state.shot[e].x > ( el[0] - margin) ) && ( state.shot[e].x < ( el[0] + el[2] + margin  ) ) );
+            var shotOnY = ( (state.shot[e].y > ( el[1] - margin) ) && ( state.shot[e].y < ( el[1] + el[3] + margin  ) ) );
             
-            // CASE : bullet out of playground  (hardcoded playground width = 790 ! )
-            if(that.state.shot[state.shotCount].x > 790){
-                clearInterval(intervID);
-                let newArray = state.shot;
-                delete newArray[state.shotCount];
-                that.setState({ shot:  newArray  });
+            if(shotOnX  &&  shotOnY){           
+                resultObj = {
+                    hasShot: true,
+                    enemyShot: state.enemies.indexOf(el)
                 }
-
-            else{
-
-                // CASE : an enemy is shot
-                if(state.shootStatus.anEnemyHasBeenShot){
-                    clearInterval(intervID);
-                    let newArray = that.state.shot;
-                    delete newArray[state.shotCount];   
-                    enemyShot(that.shootStatus.indexOfEnemyShot, that);// imported from enemyAnim
-                    that.shootStatus = {
-                        anEnemyHasBeenShot: false,
-                        indexOfEnemyShot: ''}
-
-                    that.setState({ shot:  newArray  });
-                    }                  
-
-                else{
-                    // CASE : no collision, the shot keeps moving...
-                    let newArray = state.shot;
-                    newArray[state.shotCount].x += 20;
-                    that.setState({ shot:  newArray  });
-                  }                    
             }
-    }, 50);
+        })
+        return resultObj ;
 
+    }
+            
+    let result = impactCheck();
+    if(result.hasShot){
+        //console.log("RESULT: ", result.enemyShot);
+    } else {
+        //console.log("RESULT:  :/");
+    }
+
+    // CASE : bullet out of playground  (hardcoded playground width = 790 ! )
+    if(state.shot[e].x > 790){
+        state.shot[e].active = false;
+        return state ;
+        }
+
+    else{
+
+        // CASE : an enemy is shot
+        if(result.hasShot){
+            state.shot[e].active = false;
+            console.log("Launching enemy Die anim ", result.enemyShot);
+            //return state;
+            return enemyShot(state, that, result.enemyShot);// imported from enemyAnim 
+            }                  
+
+        else{
+            // CASE : no collision, the shot keeps moving...
+            state.shot[e].x += 5;
+            return state;
+            }                    
+    }
 }
 
-export { checkImpact, animateShoot }
+export { stepShot }

@@ -4,16 +4,19 @@ import { bonusCheck } from './gameCycle'
 
 // Triggers an animation of the enemy at index [e]
 // Animation starts only if the enemy has the status 'alive' 
-const enemyShot = (e, that) => {
-    if(that.state.enemies[e][5] === "alive"){
-        let newArray = that.state.enemies;
+const enemyShot = (state, that, e) => {
+    console.log(e);
+    if(state.enemies[e][5] === "alive"){
+        let newArray = state.enemies;
         newArray[e][5] = "shot";
+
         // There are two different animations for each "M" and "F" character, each one on a different Sprite row
         if((that.props.session.substr(0, 1) === "M" )){
             newArray[e][7] =  -100;
         } else{
             newArray[e][7] =  -200;
-        }      
+        }
+        
         that.setState({enemies: newArray}, ()=>{ 
             console.log(that.state.enemies[e][4] + ' - ' + that.state.enemies[e][5]);
             that.killCount++;
@@ -23,7 +26,8 @@ const enemyShot = (e, that) => {
             console.log(that.props.session + " :" +  that.playerScore + " pts (kills: "  +  that.killCount  + ", shots: " + that.shotCount  +")" );
 
             // Animation 'enemyDie' will loop 10 times starting from 0
-            enemyDie(e, 0, that);  
+            enemyDie(e, 0, that);
+            
             
             // At the end of the animation, the enemy at index [e] is removed from the enemy array
             setTimeout(
@@ -34,6 +38,7 @@ const enemyShot = (e, that) => {
                   that.setState({ enemies:  newArray  });
                   spawnEnemy(that);               
                 }   , 1800)
+            return state
         });  
     } 
 }

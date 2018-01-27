@@ -38,7 +38,8 @@ const shoot = (state) =>{
         let newShot = {
             x: state.playerX +30,
             y: state.playerY -40,
-            id: "shot"+state.shotCount
+            id: "shot"+state.shotCount,
+            active: true
         };
         state.shot[state.shotCount] = newShot;
         
