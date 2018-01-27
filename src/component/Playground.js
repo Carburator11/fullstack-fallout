@@ -9,7 +9,7 @@ import Timer from './game/Timer.js';
 import GameOver from './game/GameOver.js';
 import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
-
+import { animateShoot } from '../function/ballistics';
 import { togglePause, bonusEvent,  bonusClose } from '../function/gameCycle.js';
 import { decrTimeLeft }   from '../function/timer.js';
 import { checkPos, shoot }  from '../function/gameAnim.js';
@@ -25,9 +25,9 @@ class Playground extends Component {
             gameOver: false,
             bonusEvent: false,
             bonusNum: 0,  
-            playerX:  60,
+            playerX:  10,
             playerY:  200,
-            pathX:    60,
+            pathX:    100,
             pathY:    200,
             playerDir: 'IDLE',
             active:     false,
@@ -35,6 +35,7 @@ class Playground extends Component {
             cheatMode:  false,
             shot: [],
             timeLeft:  30,
+            shotCount:  0,
 
             enemies: [
                 // X position (css left), Y position (css top), Width, Heigth, id/key, status, spriteX, spriteY
@@ -52,7 +53,6 @@ class Playground extends Component {
                       ] ;
 
         // Used for scores
-        this.shotCount   = 0;
         this.killCount   = 0;
         this.playerScore = 0;
         this.timeBonus   = 0;
@@ -68,38 +68,34 @@ class Playground extends Component {
     }
 
 
-handleClick(e){
-    clearInterval(this.intervId);
-    const refreshTime = 15 ; // ~24img/sec
+handleClick(e){   
     if( !this.state.pause ){
-        this.setState({pathX: e.clientX, pathY: e.clientY }, () => { 
-            //console.log("Launch setInterval !");
-            this.intervId = setInterval( ()=>{
-                this.setState( checkPos(this.state), ()=>{
-                    if(!this.state.active){
-                        //console.log("clear interval !");
-                        clearInterval(this.intervId);
-                    }
-                } );
-            }, refreshTime);
+        this.setState({pathX: e.clientX, pathY: e.clientY }, () => {
+            this.animate();  
         })
     }   
 }
 
+animate(){
+    const refreshTime = 15 ; // ~24img/sec
+    clearInterval(this.intervId); // reset preivious anims
+    this.intervId = setInterval( ()=>{
+        this.setState( checkPos(this.state), ()=>{
+            if(!this.state.active){
+                clearInterval(this.intervId);
+            }
+        });
+    }, refreshTime);
+}
+
+
 componentDidMount() {
     decrTimeLeft(this);
-    // Easter Egg !!^^ 
+    this.animate();  // Player will enter in the Playground
     window.addEventListener("keydown", 
         (e)=> {
-            // Display or Hide level blocks (not used in final version)
-            if(e.key === "o"){
-                (this.state.showBlocks)?
-                    this.setState({showBlocks: false}):
-                    this.setState({showBlocks: true})
-            }
-      
             if( (e.key === " ") || (e.key === "Enter") ){          
-                shoot(this);
+                this.setState(shoot(this.state),  ()=>{ animateShoot( this.state , this ) } );
             }
             
             if( e.key === "e" ){
@@ -108,10 +104,18 @@ componentDidMount() {
             if( e.key === "p" ){
                 // Cannot un-pause, if the game is over
                 if(!this.state.gameOver){
-                    togglePause(this);
+                    this.setState( togglePause(this.state), ()=>{ if(!this.state.pause){ this.animate();  }  } );
                 }
             }
-                   
+
+            // Display or Hide level blocks (not used in final version)
+            if(e.key === "o"){
+                (this.state.showBlocks)?
+                    this.setState({showBlocks: false}):
+                    this.setState({showBlocks: true})
+            }
+            
+            // Easter Egg !!^^
             const konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a" ];
             if(e.key === konami[this.keyboardCount]){
                 console.log("cheatSequence:  " + this.keyboardCount + "/"+ (konami.length - 1) + " " + e.key);

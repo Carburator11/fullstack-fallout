@@ -2,32 +2,29 @@ import { checkPos }  from './gameAnim.js';
  
  
  
- const togglePause = (that)=>{
+ const togglePause = (state)=>{
     console.log('togglePause')
-    if(!that.state.pause){
+    if(!state.pause){
         console.log('PAUSE');
-        that.setState({
-            pause: true,
-            active: false
-        });
+        state.pause = true;
+        state.active = false;
+        return state;
     }
 
     else{
         console.log('un-PAUSE');
-        that.setState({
-            pause: false,
-            active: true
-        }, ()=> checkPos(that) );
+        state.pause = false;
+        state.active = true;
+        return state;
     }
 }
 
-const gameOver = (that) => {
+const gameOver = (state) => {
     console.log('GAME OVER');
-    that.setState({
-      pause: true,
-      active: false,
-      gameOver: true
-    });  
+    state.pause = true;
+    state.active = false;
+    state.gameOver = true;
+    return state;
   
   }
 
@@ -36,18 +33,22 @@ const gameOver = (that) => {
 const bonusCheck = (that, count) => {
     console.log("Bonus count: " + count);
     if (  (count % 3) === 0){
-        bonusEvent(that);
+        that.setState( bonusEvent(that.state) );
     }
 
     if(count > 21 ){
-        gameOver(that);
+        that.setState( gameOver(that.state) );
     }
 
 }
 
-const bonusEvent = (that) => {
+const bonusEvent = (state) => {
     console.log("BONUS");
-    that.setState({bonusEvent: true,  pause: true, active: false});
+    state.pause = true;
+    state.active = false;
+    state.pathX = state.playerX;
+    state.pathY = state.playerY;
+    return state;
 
   }
   
@@ -61,7 +62,7 @@ const bonusClose = (that) => {
     else{
         newBonusNum = 0;
     }
-    that.setState({bonusEvent: false, bonusNum : newBonusNum, pause: false, active: true}, ()=> checkPos(that) );
+    that.setState({bonusEvent: false, bonusNum : newBonusNum, pause: false}, ()=> checkPos(that) );
 }
   
 

@@ -4,13 +4,13 @@ export default function Shot(props){
 
     const shot = props.shotPosition.map((el) =>
     <div style= {{ 
-        left: el[0],
-        top: el[1],
+        left: el.x,
+        top: el.y,
         width: 3, 
         height: 3
         }}  className= "shot"
-            id = { el[2]}
-            key= { el[2]} >
+            id = { el.id}
+            key= { el.id} >
     </div>
     );
 
