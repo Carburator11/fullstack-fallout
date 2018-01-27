@@ -9,10 +9,13 @@ import Timer from './game/Timer.js';
 import GameOver from './game/GameOver.js';
 import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
-import { bonusClose } from '../function/gameCycle.js';
-import { keyboardEvents } from '../function/keyboardEvents.js';
+
+import { togglePause, bonusEvent,  bonusClose } from '../function/gameCycle.js';
 import { decrTimeLeft }   from '../function/timer.js';
-import { checkPos }  from '../function/gameAnim.js';
+import { checkPos, shoot }  from '../function/gameAnim.js';
+import { enemyDie } from '../function/enemyAnim';
+
+
 
 class Playground extends Component {
     constructor(props) {
@@ -58,20 +61,65 @@ class Playground extends Component {
             anEnemyHasBeenShot: false,
             indexOfEnemyShot: ''
         }
+        // used for Konami code
+        this.keyboardCount = 0;
     }
 
 // Bound with arrow function in render
 handleClick(e){
     if( this.state.isIdle && !this.state.pause ){
-      this.setState({pathX: e.clientX, pathY: e.clientY, isIdle: false }, () => { checkPos(this) })
+      this.setState({pathX: e.clientX, pathY: e.clientY, isIdle: false }, () => { checkPos(this.state) })
     }   
 }
 
 componentDidMount() {
     decrTimeLeft(this);
-    keyboardEvents(this);
+    // Easter Egg !!^^ 
+    window.addEventListener("keydown", 
+        (e)=> {
+            // Display or Hide level blocks (not used in final version)
+            if(e.key === "o"){
+                (this.state.showBlocks)?
+                    this.setState({showBlocks: false}):
+                    this.setState({showBlocks: true})
+            }
+      
+            if( (e.key === " ") || (e.key === "Enter") ){          
+                shoot(this);
+            }
+            
+            if( e.key === "e" ){
+                  bonusEvent(this);
+            }
+            if( e.key === "p" ){
+                // Cannot un-pause, if the game is over
+                if(!this.state.gameOver){
+                    togglePause(this);
+                }
+            }
+                   
+            const konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a" ];
+            if(e.key === konami[this.keyboardCount]){
+                console.log("cheatSequence:  " + this.keyboardCount + "/"+ (konami.length - 1) + " " + e.key);
+                this.keyboardCount++;
+                if(e.key === konami[konami.length - 1]){
+                    this.setState({cheatMode: true});
+                    this.state.enemies.forEach((el)=>{
+                        enemyDie(this.state.enemies.indexOf(el), 0, this)});               
+                        setTimeout(
+                            ()=> {
+                                this.setState(
+                                    {cheatMode: false, enemies: []})
+                                }, 1800)}
+                    
+                }
+                else{  this.keyboardCount = 0  }
+            });
 }
 
+componentWillUnmount() {
+    window.removeEventListener("keydown");
+}
 
 render() {
       return (
