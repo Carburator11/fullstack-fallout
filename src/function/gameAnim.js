@@ -3,6 +3,7 @@ import { animateShoot } from './ballistics';
 
 const checkPos= (state) => {
     if(!state.pause){  
+        console.log('checkPos');
         var diffX = state.pathX - state.playerX ;
         var diffY = state.pathY - state.playerY ;
                  if( diffX === 0 && diffY > 0   ){ return move("S",   0,  1, state)  }
@@ -14,25 +15,21 @@ const checkPos= (state) => {
             else if( diffX < 0   && diffY > 0   ){ return move("SW", -1,  1, state)  }
             else if( diffX < 0   && diffY < 0   ){ return move("NW", -1, -1, state)  }
             else if( diffX === 0 && diffY === 0 ){ 
-                state.isIdle = true;
-                return state
+                let newState = state;
+                newState.active = false;
+                return newState
             }
     }
 }
 
 const move = (dir, x, y, state) => {
     if(!state.pause){
-        that.setState(
-        prevState => (
-            { playerDir: dir,
-              playerX: prevState.playerX + x,
-              playerY: prevState.playerY + y           
-            }), () => { 
-                window.requestAnimationFrame(  () => { 
-                    //checkPos(that.state)
-                } )    
-                    })
-
+        let newState = state;
+        newState.active = true;
+        newState.playerDir= dir;
+        newState.playerX= state.playerX + x;
+        newState.playerY= state.playerY + y;           
+        return newState;
     }
 }
 

@@ -8,14 +8,15 @@ import { checkPos }  from './gameAnim.js';
         console.log('PAUSE');
         that.setState({
             pause: true,
-            isIdle: true
+            active: false
         });
     }
 
     else{
         console.log('un-PAUSE');
         that.setState({
-            pause: false, isIdle: false
+            pause: false,
+            active: true
         }, ()=> checkPos(that) );
     }
 }
@@ -24,7 +25,7 @@ const gameOver = (that) => {
     console.log('GAME OVER');
     that.setState({
       pause: true,
-      isIdle: true,
+      active: false,
       gameOver: true
     });  
   
@@ -46,7 +47,7 @@ const bonusCheck = (that, count) => {
 
 const bonusEvent = (that) => {
     console.log("BONUS");
-    that.setState({bonusEvent: true,  pause: true, idIdle: true});
+    that.setState({bonusEvent: true,  pause: true, active: false});
 
   }
   
@@ -60,7 +61,7 @@ const bonusClose = (that) => {
     else{
         newBonusNum = 0;
     }
-    that.setState({bonusEvent: false, bonusNum : newBonusNum, pause: false, isIdle: false}, ()=> checkPos(that) );
+    that.setState({bonusEvent: false, bonusNum : newBonusNum, pause: false, active: true}, ()=> checkPos(that) );
 }
   
 

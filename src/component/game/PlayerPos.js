@@ -19,10 +19,7 @@ export default class PlayerPos extends React.Component{
   }
 
   handleClick(e){
-
-
   }
-
 
     render(){
       
@@ -31,7 +28,7 @@ export default class PlayerPos extends React.Component{
           <PlayerFrame 
               dir   = { this.props.dir }
               playerId = { this.props.playerId }
-              isIdle   = { this.props.isIdle }
+              active   = { this.props.active }
            />
 
         </div>

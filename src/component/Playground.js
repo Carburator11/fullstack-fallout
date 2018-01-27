@@ -25,12 +25,12 @@ class Playground extends Component {
             gameOver: false,
             bonusEvent: false,
             bonusNum: 0,  
-            pathX:    60,
-            pathY:   -50,
             playerX:  60,
             playerY:  200,
+            pathX:    60,
+            pathY:    200,
             playerDir: 'IDLE',
-            isIdle:     true,
+            active:     false,
             showBlocks: false,
             cheatMode:  false,
             shot: [],
@@ -63,12 +63,26 @@ class Playground extends Component {
         }
         // used for Konami code
         this.keyboardCount = 0;
+
+        this.intervId;
     }
 
-// Bound with arrow function in render
+
 handleClick(e){
-    if( this.state.isIdle && !this.state.pause ){
-      this.setState({pathX: e.clientX, pathY: e.clientY, isIdle: false }, () => { checkPos(this.state) })
+    clearInterval(this.intervId);
+    const refreshTime = 15 ; // ~24img/sec
+    if( !this.state.pause ){
+        this.setState({pathX: e.clientX, pathY: e.clientY }, () => { 
+            //console.log("Launch setInterval !");
+            this.intervId = setInterval( ()=>{
+                this.setState( checkPos(this.state), ()=>{
+                    if(!this.state.active){
+                        //console.log("clear interval !");
+                        clearInterval(this.intervId);
+                    }
+                } );
+            }, refreshTime);
+        })
     }   
 }
 
@@ -119,6 +133,7 @@ componentDidMount() {
 
 componentWillUnmount() {
     window.removeEventListener("keydown");
+    clearInterval(this.intervId);
 }
 
 render() {
@@ -153,7 +168,7 @@ render() {
                 playerY  = { this.state.playerY }
                 dir   =    { this.state.playerDir }
                 playerId = { this.props.session }
-                isIdle   = { this.state.isIdle }
+                active   = { this.state.active }
              />
           
           <Blocks blocks =       { this.state.showBlocks?this.blocks:[] } />

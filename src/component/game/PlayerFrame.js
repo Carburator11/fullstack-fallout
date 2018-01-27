@@ -11,7 +11,7 @@ class PlayerFrame extends React.Component {
         topSprite : -420,
         leftStripe: 0,
         spriteImg: '',
-        isIdle: this.props.isIdle
+        active: this.props.active
       };
       this.delay = 200;
       this.dir = { "E":  0,  "W": -70,  "N":  -140, "NE":  -140, "S": -210, "SE": -210,  "SW" : -280, "NW": -350,  "none" : -420, "Shoot": -490  };
@@ -21,17 +21,17 @@ class PlayerFrame extends React.Component {
 
 
 componentWillReceiveProps(nextProps){
-      if( nextProps.isIdle === true){
+      if( !nextProps.active ){
           this.setState( {
               leftStripe: 0, 
-              isIdle: nextProps.isIdle
+              active: nextProps.active
               });
           this.ongoingAnimation = false; 
           }
       else{                              
           this.setState({
               topSprite: this.dir[nextProps.dir],
-              isIdle:    nextProps.isIdle,
+              active:    nextProps.active,
               dir:       nextProps.dir
               },  () => {
                       if( !this.ongoingAnimation ){this.animate() } 
@@ -41,7 +41,7 @@ componentWillReceiveProps(nextProps){
 
 
 animate(){    
-      if(!this.state.isIdle){
+      if(this.state.active){
           this.ongoingAnimation = true; 
           var newLeft = (this.state.leftStripe <= -540) ? 0 : (this.state.leftStripe - 60);  
           this.setState( { 
