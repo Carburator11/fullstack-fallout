@@ -32,10 +32,12 @@ class Playground extends Component {
             showBlocks: false,
             cheatMode:  false,
             shot: [],
-            
-            timeLeft:  30,
-            shotCount:  0,
-
+            session:    this.props.session,
+            timeLeft:   30,
+            shotCount:   0,
+            killCount:   0,
+            currentKill: [],
+            playerScore: 0,
             enemies: [
                 // X position (css left), Y position (css top), Width, Heigth, id/key, status, spriteX, spriteY
                 // this should be an object...  :/
@@ -52,8 +54,6 @@ class Playground extends Component {
                       ] ;
 
         // Used for scores
-        this.killCount   = 0;
-        this.playerScore = 0;
         this.timeBonus   = 0;
 
         // used for Konami code
@@ -96,6 +96,7 @@ animateShot(e){
         })
     }, 0); // Set to zero (no performance or gameplay issue so far)
 }
+
 
 
 componentDidMount() {

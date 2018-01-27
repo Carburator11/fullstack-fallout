@@ -16,30 +16,28 @@ const enemyShot = (state, that, e) => {
         } else{
             newArray[e][7] =  -200;
         }
-        
-        that.setState({enemies: newArray}, ()=>{ 
-            console.log(that.state.enemies[e][4] + ' - ' + that.state.enemies[e][5]);
-            that.killCount++;
-            that.playerScore += 15;
-            bonusCheck(that, that.killCount);
-          
-            console.log(that.props.session + " :" +  that.playerScore + " pts (kills: "  +  that.killCount  + ", shots: " + that.shotCount  +")" );
+
+        state.enemies= newArray;
+        console.log(state.enemies[e][4] + ' - ' + state.enemies[e][5]);
+            state.killCount++;
+            state.playerScore += 15;
+         /* Bring back the logic bonusCheck/enemyDie in the main component */
+            state.currentKill.push(e)
+            
+            //bonusCheck(that, state.killCount);
+            console.log(state.session + " :" +  state.playerScore + " pts (kills: "  +  state.killCount  + ", shots: " + state.shotCount  +")" );
 
             // Animation 'enemyDie' will loop 10 times starting from 0
-            enemyDie(e, 0, that);
-            
-            
+            //enemyDie(e, 0, that);
+             
             // At the end of the animation, the enemy at index [e] is removed from the enemy array
             setTimeout(
                 ()=>{
-                  console.log(that.state.enemies[e][4] + " killed." );
-                  let newArray = that.state.enemies; 
-                  delete newArray[e];
-                  that.setState({ enemies:  newArray  });
+                  console.log(state.enemies[e][4] + " killed." );
+                  delete state.enemies[e];
                   spawnEnemy(that);               
                 }   , 1800)
-            return state
-        });  
+            return state      
     } 
 }
 
