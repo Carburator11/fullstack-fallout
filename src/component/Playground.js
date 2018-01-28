@@ -77,9 +77,8 @@ handleClick(e){
 
 
 newAnim(type, targetArgument, cb){
-    console.log('New anim - '+ type +' - '+ targetArgument );
     
-    let targetParameter = (targetArgument === undefined)?targetArgument:"";
+    let targetParameter = (targetArgument === undefined)?"":targetArgument;
 
     let newAnim = {
         type: type,
@@ -106,14 +105,13 @@ handleAnimQueue(){
         if(action.type === "enemyDie"){
              let intervId = setInterval(
                 () => {
-                    console.log('action: ', action.type);
                     let targetToAnimate = this.state.enemies[action.target] ;       
                     this.setState( enemyShot(targetToAnimate)
                             ,()=>{
                                 if(targetToAnimate.status === "dead"){
                                     let updatedArray = this.state.enemies;
                                     //updatedArray[action.target] = [];
-                                    this.newAction("spawn");
+                                    this.newAnim("spawn");
                                     this.setState({enemies: updatedArray})
                                     clearInterval(intervId);
                                     console.log("clearInterval ");
@@ -143,7 +141,7 @@ handleAnimQueue(){
                                     newShotArray[e].active = false;
                                  
                                     this.setState({ newShotArray }, ()=>{
-                                        console.log("Num: "+ num + typeof(num) );
+                                        
                                         this.newAnim("enemyDie", num, ()=>{
                                             clearInterval(intervId);
                                         })
