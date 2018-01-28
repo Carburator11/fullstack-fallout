@@ -11,16 +11,16 @@ export default function NPC(props){
 
     const npc = props.npcPosition.map((el) =>
     <div style= {{ 
-        left:   el[0],
-        top:    el[1],
-        width:  50, 
-        height: 50
+        left:   el.x,
+        top:    el.y,
+        width:  el.w, 
+        height: el.h
         }}  className= "npc"
-            id = { el[4]}
-            key= { el[4]} >
+            id = { el.id}
+            key= { el.id} >
     <Cow
-            spriteX = { el[6]}
-            spriteY = { el[7]}
+            spriteX = { el.spriteX}
+            spriteY = { el.spriteY}
      />
     </div>
     );

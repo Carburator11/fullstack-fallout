@@ -32,19 +32,20 @@ const move = (dir, x, y, state) => {
     }
 }
 
-const shoot = (state) =>{
-    if(!state.pause){
-        state.shotCount++
-        let newShot = {
-            x: state.playerX +30,
-            y: state.playerY -40,
-            id: "shot"+state.shotCount,
-            active: true
-        };
-        state.shot[state.shotCount] = newShot;
-        
-        return state;      
-    } 
+const shoot = (shots, playerX, playerY, e) =>{
+    
+    let newShot = {
+        x: playerX +30,
+        y: playerY -40,
+        id: "shot"+e,
+        num: e,
+        active: true,
+        impact: false,
+        enemyShot: undefined
+    };
+    shots[e] = newShot;
+    return shots;      
+ 
 }
 
 export { checkPos, move, shoot };

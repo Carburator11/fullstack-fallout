@@ -9,11 +9,11 @@ import Timer from './game/Timer.js';
 import GameOver from './game/GameOver.js';
 import Bonus from './game/Bonus.js';
 import bg    from '../pic/game/bg1.jpg';
-import { stepShot } from '../function/ballistics';
+import { checkImpact } from '../function/ballistics';
 import { togglePause, bonusEvent, bonusClose } from '../function/gameCycle.js';
 import { decrTimeLeft }   from '../function/timer.js';
 import { checkPos, shoot }  from '../function/gameAnim.js';
-import { enemyDie } from '../function/enemyAnim';
+import { enemyShot } from '../function/enemyAnim';
 
 class Playground extends Component {
     constructor(props) {
@@ -34,18 +34,18 @@ class Playground extends Component {
             shot: [],
             session:    this.props.session,
             timeLeft:   30,
-            shotCount:   0,
+
             killCount:   0,
             currentKill: [],
             playerScore: 0,
             enemies: [
-                // X position (css left), Y position (css top), Width, Heigth, id/key, status, spriteX, spriteY
-                // this should be an object...  :/
-                // These three enemies aren't counted in cowCount below
-                [500, 150, 50, 50, "cow1", "alive", 0, 0],
-                [500, 350, 50, 50, "cow2", "alive", 0, 0],
-                [400, 400, 50, 50, "cow3", "alive", 0, 0]]
-            };
+                {x:500, y:150, w:50, h:50, id:"cow1", status:"alive", spriteX: 0, spriteY: 0 },
+                {x:500, y:350, w:50, h:50, id:"cow2", status:"alive", spriteX: 0, spriteY: 0 },
+                {x:400, y:400, w:50, h:50, id:"cow3", status:"alive", spriteX: 0, spriteY: 0 }
+            ],
+            animQueue: [],
+            animQueuePointer: 0
+        };
         
         // Not used in the final version
         this.blocks = [
@@ -60,59 +60,140 @@ class Playground extends Component {
         this.keyboardCount = 0;
         this.refreshTime = 10 // =50img/sec
         this.intervId;
-        
         this.readyToShot = true;
-        this.rateOfFire = 200; 
+        this.rateOfFire = 300; 
+        this.shotCount=   0;
     }
 
 
 handleClick(e){
     if( !this.state.pause ){      
-        this.setState({pathX: e.clientX, pathY: e.clientY, readyToShot: false }, () => {
-            this.animate();
+        this.setState({pathX: e.clientX, pathY: e.clientY }, () => {
+            this.newAnim("move")
         })      
     }   
 }
 
-animate(){
-    clearInterval(this.intervId); // reset previous anims
-    this.intervId = setInterval( ()=>{
-        window.requestAnimationFrame(()=>{
-            this.setState( checkPos(this.state), ()=>{
-                if(!this.state.active){
-                    clearInterval(this.intervId);
-                }
-            });
-        })
-    }, this.refreshTime);
+
+
+newAnim(type, targetArgument, cb){
+    console.log('New anim - '+ type +' - '+ targetArgument );
+    
+    let targetParameter = (targetArgument === undefined)?targetArgument:"";
+
+    let newAnim = {
+        type: type,
+        target: targetParameter
+    }
+    console.log("newanim : ", newAnim);
+    let newAnimQueue = this.state.animQueue;
+    newAnimQueue.push(newAnim);
+
+    this.setState({ newAnimQueue }, ()=>{
+        this.handleAnimQueue();
+        if(cb){ cb(); }  
+        
+        
+    });
 }
 
-animateShot(e){
-    setTimeout( ()=> {
-        window.requestAnimationFrame(()=>{
-            this.setState( stepShot( this.state , this, e ), ()=> { 
-                if(this.state.shot[e].active) { this.animateShot(e) }
-            })
-        })
-    }, 0); // Set to zero (no performance or gameplay issue so far)
+handleAnimQueue(){
+    let pointer = this.state.animQueuePointer;
+    let action = this.state.animQueue[pointer];  
+    if(action){
+        console.log('handleAnimQueue - '+ action.type +' on ' + action.target, action);
+        
+        if(action.type === "enemyDie"){
+             let intervId = setInterval(
+                () => {
+                    console.log('action: ', action.type);
+                    let targetToAnimate = this.state.enemies[action.target] ;       
+                    this.setState( enemyShot(targetToAnimate)
+                            ,()=>{
+                                if(targetToAnimate.status === "dead"){
+                                    let updatedArray = this.state.enemies;
+                                    //updatedArray[action.target] = [];
+                                    this.newAction("spawn");
+                                    this.setState({enemies: updatedArray})
+                                    clearInterval(intervId);
+                                    console.log("clearInterval ");
+                                };
+                    })
+                }, 200  )
+        }
+
+        else if(action.type === "shoot"){
+            let e = action.target;
+            let currentShot = this.state.shot[e];
+            let intervId = setInterval( ()=>{
+                window.requestAnimationFrame(()=>{
+                    this.setState(
+        
+                        /* ballistics.js */
+                        checkImpact( this.state.enemies, currentShot )
+                            , ()=> {
+                                if(!currentShot.active) {
+                                    clearInterval(intervId);
+                                    console.log('shot'+e+' - out - clearInterval') 
+                                }
+        
+                                if(currentShot.impact){
+                                    let num = currentShot.enemyShot; //index of the Enemy shot
+                                    let newShotArray =  this.state.shot;
+                                    newShotArray[e].active = false;
+                                 
+                                    this.setState({ newShotArray }, ()=>{
+                                        console.log("Num: "+ num + typeof(num) );
+                                        this.newAnim("enemyDie", num, ()=>{
+                                            clearInterval(intervId);
+                                        })
+                                    });
+                                }                                           
+                            }
+                    )
+                })
+            }, this.refreshTime)   
+        }
+
+        else if(action.type === "move"){
+            clearInterval(this.intervId); // reset previous anims, if any
+            this.intervId = setInterval( ()=>{
+                window.requestAnimationFrame(()=>{
+                    this.setState(
+                        checkPos(this.state)
+                        , ()=>{
+                        if(!this.state.active){
+                            clearInterval(this.intervId);
+                        }
+                    });
+                })
+            }, this.refreshTime);
+        }
+
+        pointer++;
+        this.setState( {animQueuePointer: pointer }, ()=>{ this.handleAnimQueue  }  ) 
+    } 
 }
 
 
 
 componentDidMount() {
     decrTimeLeft(this);
-    this.animate();  // Player will enter in the Playground
+    this.newAnim("move");  // Player will enter in the Playground
+
     window.addEventListener("keydown", 
         (e)=> {
+
             /* SHOOT Function */
-            if( (e.key === " ") && this.readyToShot ){
+            if( (e.key === " ") && this.readyToShot && !this.state.pause){
+                this.shotCount++;
                 this.readyToShot = false;        
                 this.setState(
-                    shoot(this.state),  ()=>{
-                        this.animateShot(this.state.shotCount);
+                    shoot(this.state.shot, this.state.playerX, this.state.playerY, this.shotCount),
+                    ()=>{    
+                        this.newAnim("shoot", this.shotCount);
                         setTimeout(
-                            ()=>{
-                                //console.log("ready to shot!");
+                            ()=>{  // Delay between each shot
                                 this.readyToShot = true;
                             }, this.rateOfFire
                         )
@@ -147,7 +228,7 @@ componentDidMount() {
                 if(e.key === konami[konami.length - 1]){
                     this.setState({cheatMode: true});
                     this.state.enemies.forEach((el)=>{
-                        enemyDie(this.state.enemies.indexOf(el), 0, this)});               
+                        enemyShot(this.state.enemies.indexOf(el), 0, this)});               
                         setTimeout(
                             ()=> {
                                 this.setState(

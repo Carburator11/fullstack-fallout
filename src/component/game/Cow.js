@@ -16,13 +16,14 @@ export default class Cow extends React.Component{
         this.setState({
             spriteX: nextProps.spriteX,
             spriteY: nextProps.spriteY
-            })  
+            })
     }
+
     render(){
         return(
             <div className= "cowDiv">   
-            <img style= {{  left: this.state.spriteX,
-                            top:  this.state.spriteY,
+            <img style= {{  left: this.props.spriteX,
+                            top:  this.props.spriteY,
                             }}
                 src={spriteCow}
                 id="cowSprite"
