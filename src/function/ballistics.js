@@ -21,13 +21,14 @@ const checkImpact = (enemies, currentShot) =>{
                 return {currentShot, enemies}
                 }
             
-            else{
-            // No collision
-                currentShot.x += 3;
-                return currentShot ;
-            }
         })
-    }
+        
+        // No collision
+            currentShot.x += 3;
+            return currentShot ;
+        }
+        
+    
 }
 
 

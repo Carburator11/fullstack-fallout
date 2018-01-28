@@ -102,6 +102,7 @@ handleAnimQueue(){
     if(action){
         console.log('handleAnimQueue - '+ action.type +' on ' + action.target, action);
         
+        /**** ACTION -- ENEMY DIE ****/
         if(action.type === "enemyDie"){
              let intervId = setInterval(
                 () => {
@@ -110,7 +111,7 @@ handleAnimQueue(){
                             ,()=>{
                                 if(targetToAnimate.status === "dead"){
                                     let updatedArray = this.state.enemies;
-                                    //updatedArray[action.target] = [];
+                                    delete updatedArray[action.target];
                                     this.newAnim("spawn");
                                     this.setState({enemies: updatedArray})
                                     clearInterval(intervId);
@@ -120,10 +121,11 @@ handleAnimQueue(){
                 }, 200  )
         }
 
+        /**** ACTION -- SHOOT (Animation) ****/
         else if(action.type === "shoot"){
             let e = action.target;
             let currentShot = this.state.shot[e];
-            let intervId = setInterval( ()=>{
+            let intervId0 = setInterval( ()=>{
                 window.requestAnimationFrame(()=>{
                     this.setState(
         
@@ -131,7 +133,7 @@ handleAnimQueue(){
                         checkImpact( this.state.enemies, currentShot )
                             , ()=> {
                                 if(!currentShot.active) {
-                                    clearInterval(intervId);
+                                    clearInterval(intervId0);
                                     console.log('shot'+e+' - out - clearInterval') 
                                 }
         
@@ -143,7 +145,7 @@ handleAnimQueue(){
                                     this.setState({ newShotArray }, ()=>{
                                         
                                         this.newAnim("enemyDie", num, ()=>{
-                                            clearInterval(intervId);
+                                            clearInterval(intervId0);
                                         })
                                     });
                                 }                                           
@@ -153,6 +155,7 @@ handleAnimQueue(){
             }, this.refreshTime)   
         }
 
+        /**** ACTION -- MOVE ****/
         else if(action.type === "move"){
             clearInterval(this.intervId); // reset previous anims, if any
             this.intervId = setInterval( ()=>{
