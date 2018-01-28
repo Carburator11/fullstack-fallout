@@ -13,6 +13,7 @@ const enemyShot = (target) => {
         }                
         return target;
     }
+    else { return }
 }
 
 

@@ -59,7 +59,7 @@ class Playground extends Component {
         // used for Konami code
         this.keyboardCount = 0;
         this.refreshTime = 10 // =50img/sec
-        this.intervId;
+        this.intervId = "";
         this.readyToShot = true;
         this.rateOfFire = 300; 
         this.shotCount=   0;
@@ -84,7 +84,7 @@ newAnim(type, targetArgument, cb){
         type: type,
         target: targetParameter
     }
-    console.log("newanim : ", newAnim);
+    //console.log("newanim : ", newAnim);
     let newAnimQueue = this.state.animQueue;
     newAnimQueue.push(newAnim);
 
@@ -109,14 +109,17 @@ handleAnimQueue(){
                     let targetToAnimate = this.state.enemies[action.target] ;       
                     this.setState( enemyShot(targetToAnimate)
                             ,()=>{
-                                if(targetToAnimate.status === "dead"){
+                                if(targetToAnimate && targetToAnimate.status === "dead"){
                                     let updatedArray = this.state.enemies;
                                     delete updatedArray[action.target];
                                     this.newAnim("spawn");
                                     this.setState({enemies: updatedArray})
                                     clearInterval(intervId);
                                     console.log("clearInterval ");
-                                };
+                                }
+                                else if(!targetToAnimate){
+                                    clearInterval(intervId);
+                                }
                     })
                 }, 200  )
         }
@@ -134,7 +137,7 @@ handleAnimQueue(){
                             , ()=> {
                                 if(!currentShot.active) {
                                     clearInterval(intervId0);
-                                    console.log('shot'+e+' - out - clearInterval') 
+                                    //console.log('shot'+e+' - out - clearInterval') 
                                 }
         
                                 if(currentShot.impact){
@@ -210,7 +213,7 @@ componentDidMount() {
             /* PAUSE Function */
             if( e.key === "p" ){
                 if(!this.state.gameOver){
-                    this.setState( togglePause(this.state), ()=>{ if(!this.state.pause){ this.animate();  }  } );
+                    this.setState( togglePause(this.state), ()=>{ if(!this.state.pause){ this.newAnim("move");  }  } );
                 }
             }
 
@@ -223,22 +226,27 @@ componentDidMount() {
             
             // Easter Egg !!^^
             const konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a" ];
+
             if(e.key === konami[this.keyboardCount]){
                 console.log("cheatSequence:  " + this.keyboardCount + "/"+ (konami.length - 1) + " " + e.key);
+                console.log(e.key === konami[this.keyboardCount] )
                 this.keyboardCount++;
+                console.log(this.keyboardCount);
+                
                 if(e.key === konami[konami.length - 1]){
                     this.setState({cheatMode: true});
+                    console.log('Cheat Mode !');
                     this.state.enemies.forEach((el)=>{
-                        enemyShot(this.state.enemies.indexOf(el), 0, this)});               
+                        this.newAnim('enemyDie', this.state.enemies.indexOf(el) );              
                         setTimeout(
                             ()=> {
-                                this.setState(
-                                    {cheatMode: false, enemies: []})
-                                }, 1800)}
-                    
+                                this.setState( { cheatMode: false, enemies: [] } )
+                        }, 1800)                           
+                    })
                 }
-                else{  this.keyboardCount = 0  }
-            });
+            }
+            else{  this.keyboardCount = 0  } 
+    })        
 }
 
 componentWillUnmount() {
