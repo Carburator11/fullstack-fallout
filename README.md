@@ -2,7 +2,8 @@
 
 
 
-**Déployé sur :** [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/)
+**Déployé sur :** [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/)     
+(le lancement du Dyno peut prendre jusqu'à 30 sec)
 
 
 * **Front-end :**  React, React-Router (sur base de [Create React App](https://github.com/facebookincubator/create-react-app))
