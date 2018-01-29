@@ -1,34 +1,20 @@
 
 
-const checkPos= (state) => {
-    if(!state.pause){  
-        //console.log('checkPos');
-        var diffX = state.pathX - state.playerX ;
-        var diffY = state.pathY - state.playerY ;
-                 if( diffX === 0 && diffY > 0   ){ return move("S",   0,  1, state)  }
-            else if( diffX === 0 && diffY < 0   ){ return move("N",   0, -1, state)  }
-            else if( diffX > 0   && diffY === 0 ){ return move("E",   1,  0, state)  }
-            else if( diffX < 0   && diffY === 0 ){ return move("W",  -1,  0, state)  }
-            else if( diffX > 0   && diffY > 0   ){ return move("SE",  1,  1, state)  }
-            else if( diffX > 0   && diffY < 0   ){ return move("NE",  1, -1, state)  }
-            else if( diffX < 0   && diffY > 0   ){ return move("SW", -1,  1, state)  }
-            else if( diffX < 0   && diffY < 0   ){ return move("NW", -1, -1, state)  }
+const checkPos= (pathX, pathY, playerX, playerY, pause) => {
+    if(!pause){  
+        var diffX = pathX - playerX ;
+        var diffY = pathY - playerY ;
+                 if( diffX === 0 && diffY > 0   ){ return { playerDir: "S", playerX: playerX + 0, playerY: playerY +  1, active: true}  }
+            else if( diffX === 0 && diffY < 0   ){ return { playerDir: "N", playerX: playerX + 0, playerY: playerY   -1, active: true}  }
+            else if( diffX > 0   && diffY === 0 ){ return { playerDir: "E", playerX: playerX + 1, playerY: playerY +  0, active: true}  }
+            else if( diffX < 0   && diffY === 0 ){ return { playerDir: "W", playerX: playerX  -1, playerY: playerY +  0, active: true}  }
+            else if( diffX > 0   && diffY > 0   ){ return { playerDir: "SE",playerX: playerX + 1, playerY: playerY +  1, active: true}  }
+            else if( diffX > 0   && diffY < 0   ){ return { playerDir: "NE",playerX: playerX + 1, playerY: playerY   -1, active: true}  }
+            else if( diffX < 0   && diffY > 0   ){ return { playerDir: "SW",playerX: playerX  -1, playerY: playerY +  1, active: true}  }
+            else if( diffX < 0   && diffY < 0   ){ return { playerDir: "NW",playerX: playerX  -1, playerY: playerY   -1, active: true}  }
             else if( diffX === 0 && diffY === 0 ){ 
-                let newState = state;
-                newState.active = false;
-                return newState
+                return {active: false}
             }
-    }
-}
-
-const move = (dir, x, y, state) => {
-    if(!state.pause){
-        let newState = state;
-        newState.active = true;
-        newState.playerDir= dir;
-        newState.playerX= state.playerX + x;
-        newState.playerY= state.playerY + y;           
-        return newState;
     }
 }
 
@@ -48,4 +34,4 @@ const shoot = (shots, playerX, playerY, e) =>{
  
 }
 
-export { checkPos, move, shoot };
+export { checkPos, shoot };

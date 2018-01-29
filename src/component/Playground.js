@@ -160,11 +160,13 @@ handleAnimQueue(){
 
         /**** ACTION -- MOVE ****/
         else if(action.type === "move"){
+            
             clearInterval(this.intervId); // reset previous anims, if any
             this.intervId = setInterval( ()=>{
                 window.requestAnimationFrame(()=>{
+                    let positions = [this.state.pathX, this.state.pathY, this.state.playerX, this.state.playerY, this.state.pause];
                     this.setState(
-                        checkPos(this.state)
+                        checkPos(...positions)
                         , ()=>{
                         if(!this.state.active){
                             clearInterval(this.intervId);
