@@ -1,15 +1,15 @@
 # Fullstack-fallout
 
 
-
-**Déployé sur :** [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/) 
+Branche master déployée sur : [fullstack-fallout.herokuapp.com/](https://fullstack-fallout.herokuapp.com/) 
 
 **Composant principal** pour la logique de jeu :  [src/component/Playground.js](https://github.com/Carburator11/fullstack-fallout/blob/rRefacto/src/component/Playground.js)
 
 27/01 : les setState ont été ramenés dans le composant principal (suppression des this = that)
 
 28/01 : l' "Animation Queue" permet de bien lancer les événements (performance améliorée)
-Le problème est de les arrêter (!!) Revoir++ les clearInterval..
+Le problème est de les arrêter (!!)       
+Revoir++ les clearInterval..
 
 * **Front-end :**  React, React-Router (sur base de [Create React App](https://github.com/facebookincubator/create-react-app))
 * **Back-end :**  Node.js ([React simple boilerplate](https://github.com/andela-kadeniyi/react-simple-boilerplate/))
