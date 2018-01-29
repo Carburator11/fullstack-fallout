@@ -7,7 +7,7 @@ import About from './component/About';
 import NotFound from './component/NotFound';
 import Scores from './component/Scores';
 import Play from './component/Play';
-import {unregister} from './registerServiceWorker';
+import {unregister } from './registerServiceWorker';
 //import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter, Link, NavLink, Switch, Route} from 'react-router-dom';
 
