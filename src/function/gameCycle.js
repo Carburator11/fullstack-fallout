@@ -34,7 +34,7 @@ const gameOver = (that) => {
 // Bonus event shows a "PERK"
 const bonusCheck = (that, count) => {
     console.log("Bonus count: " + count);
-    if (  (count % 3) === 0){
+    if (  (count % 5) === 0){
         bonusEvent(that);
     }
 

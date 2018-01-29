@@ -9,7 +9,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "author": "Kayode Adeniyi",
+  "author": "PV",
   "license": "ISC",
   "dependencies": {
     "react": "^16.2.0",

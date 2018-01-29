@@ -4,7 +4,7 @@ import vaultBoy from '../pic/boy.gif';
 
 const Scores = () => (
     <div className = "content">
-        <p>Scores...</p>
+        <p>Scores coming soon...</p>
         
         <img src={vaultBoy} alt ="vaultBoy"/>
     </div>

@@ -13,7 +13,6 @@
 24/01/2018 :  trop de this = that dans la logique du jeu './src/function'....                
 => voir branche [rRefacto](https://github.com/Carburator11/fullstack-fallout/tree/rRefacto)             
 24/01/2018 : ne gère pas les requêtes POST (cf. page et fonction Scores)    
-29/01/2018 : le service-worker a gardé en cache une ancienne version de la CSS.
 
 La version JS vanilla de ce projet est consultable sur : [carb11.eu](http://carb11.eu/fallout/).
 

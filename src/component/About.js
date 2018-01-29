@@ -10,8 +10,8 @@ class About extends Component {
       return (
         <div className = "content">
         <div className= "about">
-          <h1>About me & the fullstack-fallout project</h1>
-          <p>Pierre, 33, from Paris area.<br/> I'm a big fan of Fallout and retro-gaming</p>
+          <h1>About</h1>
+          <p>Me : I'm 33, from Paris area.<br/> I'm a big fan of Fallout and retro-gaming</p>
           <div className="download">
               <a href={cv} target="_blank"> > Download my CV !  </a>
           </div>

@@ -18,9 +18,6 @@ export default class GameOver extends React.Component{
                         Enemy killed: {this.props.killCount} <br/>
                         Shots fired:  {this.props.shotCount} <br/>
                         <div className="gameOverBtn">
-                            <form action="/scores"  method="post">
-                                <input type= "submit" value= "Scores"  />   
-                            </form>
                             <form action="/about"  method="get">  
                                 <input type= "submit" value= "About"  /> 
                             </form>
